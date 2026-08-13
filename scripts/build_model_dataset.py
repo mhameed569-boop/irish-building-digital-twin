@@ -18,6 +18,13 @@ WEATHER_FILE = (
     / "weather_by_county_2024.csv"
 )
 
+CENSUS_FILE = (
+    PROJECT_FOLDER
+    / "data"
+    / "processed"
+    / "census_housing_by_county_2022.csv"
+)
+
 OUTPUT_FILE = (
     PROJECT_FOLDER
     / "data"
@@ -41,14 +48,23 @@ priority_rows = read_csv(PRIORITY_FILE)
 print("Reading weather data...")
 weather_rows = read_csv(WEATHER_FILE)
 
+print("Reading Census housing data...")
+census_rows = read_csv(CENSUS_FILE)
+
 
 weather_by_county = {
     row["County"].strip().upper(): row
     for row in weather_rows
 }
 
+census_by_county = {
+    row["County"].strip().upper(): row
+    for row in census_rows
+}
+
+
 combined_rows = []
-missing_weather = []
+missing_data = []
 
 
 for priority_row in priority_rows:
@@ -56,9 +72,10 @@ for priority_row in priority_rows:
     county_key = county.upper()
 
     weather_row = weather_by_county.get(county_key)
+    census_row = census_by_county.get(county_key)
 
-    if weather_row is None:
-        missing_weather.append(county)
+    if weather_row is None or census_row is None:
+        missing_data.append(county)
         continue
 
     rainfall_value = weather_row.get(
@@ -66,12 +83,31 @@ for priority_row in priority_rows:
         weather_row.get("AnnualRainfall (mm)", ""),
     )
 
+    total_housing_stock = float(
+        census_row["Total Housing Stock"]
+    )
+
+    apartment_dwellings = float(
+        census_row["Apartment Dwellings"]
+    )
+
+    apartment_share = (
+        apartment_dwellings
+        / total_housing_stock
+        * 100
+        if total_housing_stock
+        else 0
+    )
+
     combined_rows.append(
         {
-            "Year": 2024,
+            "Analysis Year": 2024,
             "County": county,
             "Vacancy Quarter": priority_row[
                 "Vacancy Quarter"
+            ],
+            "Census Year": census_row[
+                "Census Year"
             ],
             "Vacancy Rate (%)": priority_row[
                 "Vacancy Rate (%)"
@@ -96,6 +132,37 @@ for priority_row in priority_rows:
             "Heating Degree Days (Base 15.5C)": weather_row[
                 "Estimated Heating Degree Days (Base 15.5C)"
             ],
+            "Total Housing Stock": census_row[
+                "Total Housing Stock"
+            ],
+            "Occupied Dwellings": census_row[
+                "Occupied Dwellings"
+            ],
+            "Census Vacant Dwellings": census_row[
+                "Vacant Dwellings"
+            ],
+            "Holiday Homes": census_row[
+                "Holiday Homes"
+            ],
+            "Census Vacant Share (%)": census_row[
+                "Vacant Share of Housing Stock (%)"
+            ],
+            "Detached Houses": census_row[
+                "Detached Houses"
+            ],
+            "Semi-Detached Houses": census_row[
+                "Semi-Detached Houses"
+            ],
+            "Terraced Houses": census_row[
+                "Terraced Houses"
+            ],
+            "Apartment Dwellings": census_row[
+                "Apartment Dwellings"
+            ],
+            "Apartment Share (%)": round(
+                apartment_share,
+                2,
+            ),
             "Vacancy Component (0-100)": priority_row[
                 "Vacancy Component (0-100)"
             ],
@@ -112,17 +179,18 @@ for priority_row in priority_rows:
     )
 
 
-if missing_weather:
+if missing_data:
     print(
-        "Counties missing weather data:",
-        ", ".join(missing_weather),
+        "Counties missing source data:",
+        ", ".join(missing_data),
     )
 
 
 fieldnames = [
-    "Year",
+    "Analysis Year",
     "County",
     "Vacancy Quarter",
+    "Census Year",
     "Vacancy Rate (%)",
     "Poor BER (%)",
     "Annual Mean Temperature (C)",
@@ -130,16 +198,22 @@ fieldnames = [
     "Annual Mean Maximum Temperature (C)",
     "Annual Rainfall (mm)",
     "Heating Degree Days (Base 15.5C)",
+    "Total Housing Stock",
+    "Occupied Dwellings",
+    "Census Vacant Dwellings",
+    "Holiday Homes",
+    "Census Vacant Share (%)",
+    "Detached Houses",
+    "Semi-Detached Houses",
+    "Terraced Houses",
+    "Apartment Dwellings",
+    "Apartment Share (%)",
     "Vacancy Component (0-100)",
     "BER Component (0-100)",
     "Renovation Priority Score",
     "Priority Rank",
 ]
 
-OUTPUT_FILE.parent.mkdir(
-    parents=True,
-    exist_ok=True,
-)
 
 with OUTPUT_FILE.open(
     mode="w",
@@ -156,4 +230,4 @@ with OUTPUT_FILE.open(
 
 
 print(f"Counties combined: {len(combined_rows)}")
-print(f"Model dataset created: {OUTPUT_FILE}")
+print(f"Model dataset updated: {OUTPUT_FILE}")
