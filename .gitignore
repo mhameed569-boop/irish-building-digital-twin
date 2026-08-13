@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Downloaded and restricted research data
+data/raw/
+data/restricted/
+.env
