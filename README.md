@@ -134,6 +134,28 @@ The analysis combines 2024 vacancy, BER, and weather observations with
 2022 Census housing characteristics. The reference years are retained
 in the dataset and must be considered when interpreting results.
 
+## Small Area Research Extension
+
+The reproducible public-data extension uses all 18,919 official Census
+2022 Small Areas rather than treating 26 counties as the final modelling
+sample. Its principal output is:
+
+```text
+data/processed/spatial_model_features_small_area.csv
+```
+
+It combines selected CSO SAPS demographic/housing/heating variables,
+official Tailte Éireann identifiers and boundaries, centroids, density,
+urban/rural context, a geography crosswalk, and a separate neighbour
+edge list. County BER, weather, vacancy and priority values are clearly
+labelled as contextual county variables; they are not presented as
+Small Area measurements.
+
+Actual residential consumption is not publicly present. CSO COP BER and
+BER Energy research microdata require authorised secure access. Public
+BER remains a theoretical-performance predictor and is never used as a
+substitute target.
+
 ## Project Structure
 
 ```text
@@ -163,9 +185,19 @@ data/
     processed/
         Aggregated and reproducible research outputs
 
+    interim/
+        Reproducible large transfer-learning tables — excluded from Git
+
+    metadata/
+        Source manifest and official variable metadata
+
 outputs/
     figures/
         Research charts and county maps
+
+docs/
+    Data inventory, provenance, dictionaries, temporal alignment,
+    restricted-data plan, and international/satellite assessments
 ```
 
 ## How to Run
@@ -207,6 +239,29 @@ python scripts/plot_renovation_priority.py
 python scripts/plot_renovation_priority_map.py
 ```
 
+### Run the public Small Area pipeline
+
+Existing raw downloads can be processed and validated safely with:
+
+```bash
+python run_data_pipeline.py
+```
+
+To refresh official public downloads first:
+
+```bash
+python run_data_pipeline.py --download
+```
+
+Restricted validation is opt-in and requires a secure local input path:
+
+```bash
+python run_data_pipeline.py --include-restricted --restricted-path D:\approved_project\metered.csv
+```
+
+Run that command only inside the authorised secure environment. It does
+not download or upload restricted data.
+
 ## Main Outputs
 
 ```text
@@ -217,15 +272,25 @@ data/processed/census_housing_by_county_2022.csv
 data/processed/energy_archetype_features_by_county_2024.csv
 data/processed/renovation_priority_by_county_2024.csv
 data/processed/final_model_dataset_county_2024.csv
+data/processed/census_demographic_features_small_area_2022.csv
+data/processed/spatial_features_small_area.csv
+data/processed/geography_crosswalk.csv
+data/processed/small_area_neighbors.csv
+data/processed/spatial_model_features_small_area.csv
 
 outputs/figures/renovation_priority_top10.png
 outputs/figures/renovation_priority_map_2024.png
+outputs/data_quality_report.txt
+outputs/ml_readiness_report.md
+outputs/research_data_collection_status.md
 ```
 
 ## Requirements
 
 - Python 3
 - Matplotlib
+
+Install the pinned dependency with `python -m pip install -r requirements.txt`.
 
 The data-processing scripts mainly use Python's standard library.
 The map is generated without requiring GeoPandas.

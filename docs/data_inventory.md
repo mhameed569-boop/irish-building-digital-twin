@@ -1,0 +1,29 @@
+# Research data inventory
+
+Status reflects the repository on 17 August 2026. Raw public downloads are reproducible and excluded from Git; processed public outputs are retained. BER means theoretical performance unless explicitly described as metered energy.
+
+| Dataset | Source | Status | Year | Spatial Resolution | Key Variables | Access Type | Script | Output | Notes |
+|---|---|---:|---|---|---|---|---|---|---|
+| Residential vacancy VAC14 | CSO PxStat | COMPLETE | 2024Q4 | Local authority / 26-county summary | vacant dwellings, vacancy rate | Public API | `download_cso_vacancy.py`, `summarize_vacancy.py` | `latest_vacancy_rates.csv` | Existing before this task |
+| Domestic BER EBA02 | CSO PxStat | COMPLETE | 2024 | County | rating, dwelling type, fuel, construction period | Public API | `download_cso_ber.py`, `summarize_ber.py`, `summarize_energy_archetypes.py` | `ber_by_county_2024.csv`, `energy_archetype_features_by_county_2024.csv` | Aggregated theoretical BER, not actual use |
+| County weather | Met Éireann | COMPLETE | 2024 | County | temperature, rainfall, estimated HDD | Public | `download_met_eireann_weather.py`, `summarize_weather.py` | `weather_by_county_2024.csv` | Existing before this task |
+| Census housing F2020 | CSO PxStat | COMPLETE | 2022 | County | stock, occupancy, vacancy, dwelling type | Public API | `download_cso_census_housing.py`, `summarize_census_housing.py` | `census_housing_by_county_2022.csv` | Existing before this task |
+| County boundaries | Tailte Éireann | COMPLETE | 2024 | County | polygons, names/codes | Public, CC BY 4.0 | `download_county_boundaries.py` | raw GeoJSON | Existing; used for maps |
+| County integrated model table | Derived | COMPLETE | 2022/2024 | County, 26 | 44 structural, climate and indicator fields | Public derived | `build_final_model_dataset.py` | `final_model_dataset_county_2024.csv` | Preserved; exploratory sample only |
+| Renovation Priority Index | Derived | COMPLETE | 2024 | County, 26 | 50% vacancy + 50% poor-BER min-max components | Public derived | `build_renovation_priority.py` | `renovation_priority_by_county_2024.csv` | Preliminary indicator, unchanged |
+| Census 2022 SAPS | CSO | COMPLETE | 2022 | Small Area, 18,919 | population, household, age, labour, education, tenure, housing, heating | Public download | `download_small_area_census.py`, `process_small_area_features.py` | `census_demographic_features_small_area_2022.csv` | 795 raw columns selectively reduced |
+| SAPS glossary | CSO | COMPLETE | 2022 | Variable metadata | code, label, definition | Public XLSX | `download_census_glossary.py` | `data/metadata/cso_saps_2022_glossary.xlsx` | Official revised glossary |
+| Small Area boundaries (20 m generalised) | Tailte Éireann | COMPLETE | 2022 | Small Area, 18,919 | polygons and official geography crosswalk | Public, CC BY 4.0 | `download_small_area_boundaries.py`, `build_small_area_spatial_features.py` | `spatial_features_small_area.csv`, `geography_crosswalk.csv` | WGS84 export; source CRS Irish Transverse Mercator |
+| Small Area adjacency | Derived from official polygons | COMPLETE | 2022 | 110,124 directed neighbour links | origin/destination SA GUID | Public derived | `build_small_area_spatial_features.py` | `small_area_neighbors.csv` | Shared rounded boundary vertex; verify weights choice for MGWR |
+| Small Area public model features | Derived | PARTIAL | 2022/2024 | Small Area, 18,919 | census + spatial + county climate/BER/vacancy context | Public derived | `build_spatial_model_features.py` | `spatial_model_features_small_area.csv` | Actual-energy target absent; county fields are contextual, not SA measurements |
+| Met Éireann 1 km monthly grids | Met Éireann | PARTIAL | multiple | 1 km Irish Grid | rainfall, mean/min/max temperature | Public, CC BY 4.0 | Not yet integrated | none | Scientifically useful next refinement; wind/solar grids not confirmed |
+| COP BER Energy RMF | CSO | RESTRICTED | 2022 | Household / secure geography | Census, BER, quarterly electricity and gas | Researcher Data Portal | `restricted/prepare_metered_energy_model_input.py` | validation/approved aggregates only | Best Irish target candidate; never commit record-level data |
+| BER Energy RMF | CSO | RESTRICTED | 2016–2024 | Dwelling / secure geography | BER, quarterly electricity and gas | Researcher Data Portal | same template | validation/approved aggregates only | No Census fields; secure processing required |
+| UK NEED anonymised 50k | UK DESNZ | COMPLETE | consumption through 2023 | Dwelling / region | actual gas/electricity, property type, age/floor/EPC bands | Public, OGL | `download_uk_need_sample.py`, `process_uk_need_sample.py` | `data/interim/uk_need_transfer_features_2023.csv` | HIGH transfer-learning candidate; 45,459 valid electricity records |
+| UK NEED 4 million | UK DESNZ | OPTIONAL | through 2023 | Dwelling / region | same broader sample | Public, OGL | none | none | Defer until the 50k feasibility study succeeds |
+| UK SERL Observatory | UCL/UKDS | RESTRICTED | longitudinal | Dwelling, half-hourly | smart-meter, EPC, weather, household | SecureLab | none | none | HIGH scientific value, separate authorisation |
+| Australian SGSC | Australian Government | OPTIONAL | 2010–2014 | Household | half-hour electricity, trial/demographic fields | Public, CC BY 3.0 | none | none | MEDIUM due age and climate/domain shift |
+| Ausgrid Solar Home | Ausgrid | OPTIONAL | 2010–2013 | Household | half-hour load and PV generation | Public, CC BY 3.0 | none | none | MEDIUM/LOW for main target |
+| CORINE / Copernicus land cover | Copernicus | OPTIONAL | 2018/2021+ | Raster/vector | built-up/land cover | Public | none | none | DEFER; existing SAPS urban/rural already covers immediate need |
+
+Processed paths above are under `data/processed/` unless stated otherwise.

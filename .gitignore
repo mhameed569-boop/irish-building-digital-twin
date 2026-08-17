@@ -220,3 +220,26 @@ __marimo__/
 data/raw/
 data/restricted/
 .env
+
+# Reproducible but large intermediate research tables
+data/interim/
+
+# Restricted/secure research data and disclosure-control artefacts
+**/*smart[-_ ]meter*microdata*
+**/*COP[-_ ]BER*microdata*
+**/*BER[-_ ]Energy*RMF*
+**/*research[-_ ]microdata*
+**/*secure[-_ ]export*
+**/*record[-_ ]level*
+**/*personally[-_ ]identifiable*
+**/restricted_input/
+**/secure_workspace/
+
+# Credentials and local secrets
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*api_token*
+*access_token*

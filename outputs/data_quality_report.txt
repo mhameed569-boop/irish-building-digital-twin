@@ -1,0 +1,78 @@
+Research data quality report
+================================================================================
+[INFO] county_final :: expected_geographic_unit_count :: PASS
+  expected=26; observed=26
+[INFO] county_final :: duplicate_geographic_ids :: PASS
+  duplicates=0
+[INFO] county_final :: missing_values :: PASS
+  none
+[INFO] county_final :: percentage_range_0_100 :: PASS
+  invalid_values=0
+[INFO] county_final :: negative_counts :: PASS
+  negative_values=0
+[INFO] county_final :: exact_duplicate_variables :: PASS
+  none
+[WARNING] county_final :: near_zero_variance :: WARN
+  Analysis Year, Vacancy Quarter, Census Year
+[INFO] small_area_census :: expected_geographic_unit_count :: PASS
+  expected=18919; observed=18919
+[INFO] small_area_census :: duplicate_geographic_ids :: PASS
+  duplicates=0
+[WARNING] small_area_census :: missing_values :: WARN
+  average_household_size=3; one_person_households_pct=3; one_parent_households_pct=3; third_level_education_pct=1; low_education_pct=1; occupied_dwellings_pct=3; other_vacant_dwellings_pct=3; holiday_homes_pct=3; house_or_bungalow_pct=3; apartment_or_bedsit_pct=3; pre_2001_dwellings_pct=3; built_2016_or_later_pct=3; owner_occupied_pct=3; private_rented_pct=3; social_rented_pct=3; oil_heating_pct=3; gas_heating_pct=3; electric_heating_pct=3; coal_or_peat_heating_pct=3; no_central_heating_pct=3; renewable_energy_pct=3
+[INFO] small_area_census :: percentage_range_0_100 :: PASS
+  invalid_values=0
+[INFO] small_area_census :: negative_counts :: PASS
+  negative_values=0
+[INFO] small_area_census :: exact_duplicate_variables :: PASS
+  none
+[WARNING] small_area_census :: near_zero_variance :: WARN
+  census_year
+[INFO] small_area_spatial :: expected_geographic_unit_count :: PASS
+  expected=18919; observed=18919
+[INFO] small_area_spatial :: duplicate_geographic_ids :: PASS
+  duplicates=0
+[WARNING] small_area_spatial :: missing_values :: WARN
+  urban_area_name=5734
+[INFO] small_area_spatial :: percentage_range_0_100 :: PASS
+  invalid_values=0
+[INFO] small_area_spatial :: negative_counts :: PASS
+  negative_values=0
+[INFO] small_area_spatial :: exact_duplicate_variables :: PASS
+  none
+[WARNING] small_area_spatial :: near_zero_variance :: WARN
+  census_year, nuts1_code, nuts1_name
+[INFO] small_area_model :: expected_geographic_unit_count :: PASS
+  expected=18919; observed=18919
+[INFO] small_area_model :: duplicate_geographic_ids :: PASS
+  duplicates=0
+[WARNING] small_area_model :: missing_values :: WARN
+  urban_area_name=5734; average_household_size=3; one_person_households_pct=3; one_parent_households_pct=3; third_level_education_pct=1; low_education_pct=1; occupied_dwellings_pct=3; other_vacant_dwellings_pct=3; holiday_homes_pct=3; house_or_bungalow_pct=3; apartment_or_bedsit_pct=3; pre_2001_dwellings_pct=3; built_2016_or_later_pct=3; owner_occupied_pct=3; private_rented_pct=3; social_rented_pct=3; oil_heating_pct=3; gas_heating_pct=3; electric_heating_pct=3; coal_or_peat_heating_pct=3; no_central_heating_pct=3; renewable_energy_pct=3
+[INFO] small_area_model :: percentage_range_0_100 :: PASS
+  invalid_values=0
+[INFO] small_area_model :: negative_counts :: PASS
+  negative_values=0
+[WARNING] small_area_model :: exact_duplicate_variables :: WARN
+  [['census_year', 'census_reference_year'], ['weather_reference_year', 'ber_reference_year']]
+[WARNING] small_area_model :: near_zero_variance :: WARN
+  census_year, nuts1_code, nuts1_name, census_reference_year, weather_reference_year, ber_reference_year, vacancy_reference_quarter
+[INFO] county_final :: apartment_count_dependency :: PASS
+  inconsistent_rows=0
+[WARNING] county_final :: pre_2000_exact_dependency :: DOCUMENTED
+  inconsistent_rows=0; exclude one representation from regression
+[INFO] small_area_census :: housing_stock_component_total :: PASS
+  inconsistent_rows=0
+[INFO] small_area_spatial :: coordinate_validity_ireland :: PASS
+  invalid_coordinates=0
+[INFO] county_final :: expected_year_Analysis Year :: PASS
+  expected=['2024']; observed=['2024']
+[INFO] county_final :: expected_year_Census Year :: PASS
+  expected=['2022']; observed=['2022']
+[INFO] small_area_model :: expected_year_census_reference_year :: PASS
+  expected=['2022']; observed=['2022']
+[INFO] small_area_model :: expected_year_weather_reference_year :: PASS
+  expected=['2024']; observed=['2024']
+[INFO] small_area_model :: expected_year_ber_reference_year :: PASS
+  expected=['2024']; observed=['2024']
+[BLOCKER] small_area_model :: actual_energy_consumption_target :: NOT_AVAILABLE_PUBLICLY
+  Must be integrated inside the authorised CSO Researcher Data Portal; BER is not a substitute.
